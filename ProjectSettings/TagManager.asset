@@ -44,7 +44,7 @@ TagManager:
   - name: act
     uniqueID: 3832722209
     locked: 0
-  - name: mouse
+  - name: ui
     uniqueID: 2164288753
     locked: 0
   m_RenderingLayers:

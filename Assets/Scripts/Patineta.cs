@@ -20,26 +20,26 @@ public class Patineta : MonoBehaviour
        UpdateScore();  }
     void Update()
     {
-        if(timer>0 && !ended)
+        if(timer>0 && !ended && !GameManager.Instance.GetEnPausa())
         {  timer-=Time.deltaTime;  t_barraEnergia.localScale=new Vector2(timer/10,1);  CheckInput();  }
         else
         if(timer<0 && !ended)
-        {  ended=true;  sr_direccion.enabled=false;
+        {  
+           ended=true;  sr_direccion.enabled=false;
            go_final.SetActive(true);
+           GameManager.Instance.SetEstado("pausa");
            if(!doneBefore)
            {  if(score<10){  Lost();  }else{  Won();  }  }
            else
            {  JustEnd();  }
         }
-        if(InputController.Instance.space.WasPressedThisFrame())
-        {  SpawnDir();  }
     }
     void CheckInput()
     {
-        if(InputController.Instance.lUp.WasPressedThisFrame())   {  CheckIfCorrect(0);  }else
-        if(InputController.Instance.lLeft.WasPressedThisFrame()) {  CheckIfCorrect(1);  }else
-        if(InputController.Instance.lDown.WasPressedThisFrame()) {  CheckIfCorrect(2);  }else
-        if(InputController.Instance.lRight.WasPressedThisFrame()){  CheckIfCorrect(3);  }
+        if(InputController.Instance.lUp.WasPressedThisFrame() || InputController.Instance.rUp.WasPressedThisFrame() )   {  CheckIfCorrect(0);  }else
+        if(InputController.Instance.lLeft.WasPressedThisFrame() || InputController.Instance.rLeft.WasPressedThisFrame() ) {  CheckIfCorrect(1);  }else
+        if(InputController.Instance.lDown.WasPressedThisFrame() || InputController.Instance.rDown.WasPressedThisFrame() ) {  CheckIfCorrect(2);  }else
+        if(InputController.Instance.lRight.WasPressedThisFrame() || InputController.Instance.rRight.WasPressedThisFrame() ){  CheckIfCorrect(3);  }
     }
     void CheckIfCorrect(int w)
     {
@@ -59,7 +59,7 @@ public class Patineta : MonoBehaviour
         sr_direccion.sprite=spr_direccion[which];
     }
     void Lost()
-    {  txt_final.text="quizás la próxima"; }
+    {  txt_final.text="quizás la próxima";  }
     void Won()
     {  txt_final.text="lo lograste !!";  GameManager.Instance.SetPatinetaDone(true);  }
     void JustEnd()
