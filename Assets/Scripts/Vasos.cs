@@ -21,6 +21,7 @@ public class Vasos : MonoBehaviour
     bool vaso_elegido,vaso_correcto,resolviendo;
     void Start()
     {
+        if(GameManager.Instance.GetVasosDone()){   doneBefore=true;   }
         Inicio();
     }
     void Update()

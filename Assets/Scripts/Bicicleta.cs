@@ -24,9 +24,9 @@ public class Bicicleta : MonoBehaviour
     {
         if(!ended && !GameManager.Instance.GetEnPausa())
         {
-            if(InputController.Instance.lLeft.WasPressedThisFrame() && pos_actual>0)
+            if(InputController.Instance.a.WasPressedThisFrame() && pos_actual>0)
             {  pos_actual--;  t_val.DOLocalMoveX(_posicionesx[pos_actual],.3f);  }
-            if(InputController.Instance.lRight.WasPressedThisFrame() && pos_actual<2)
+            if(InputController.Instance.d.WasPressedThisFrame() && pos_actual<2)
             {  pos_actual++;  t_val.DOLocalMoveX(_posicionesx[pos_actual],.3f);  }
 
             timer+=Time.deltaTime;  Debug.Log((int)timer);

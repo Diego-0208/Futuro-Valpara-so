@@ -13,9 +13,17 @@ public class GameManager : MonoBehaviour
     public bool GetVasosDone(){  return vasos_done;  } 
     public void SetVasosDone(bool x){  vasos_done=x;  if(x){  sr_vasos.color=c_green;  CheckCompletos();  }  }
 
-    bool bicicleta_done=true;
+    bool bicicleta_done=true; //x ahora, cambiar cuando si lo programe bien
     public bool GetBicicletaDone(){  return bicicleta_done;  } 
-    public void SetBicicletaDone(bool x){  bicicleta_done=x;  if(x){  sr_bicicleta.color=c_green;  CheckCompletos();  }  }
+    public void SetBicicletaDone(bool x){  bicicleta_done=x;  if(x){  sr_bicicleta.color=c_green;  Debug.Log("me");  CheckCompletos();  }  }
+    
+    bool metro_done;
+    public bool GetMetroDone(){  return metro_done;  } 
+    public void SetMetroDone(bool x){  metro_done=x;  if(x){  sr_metro.color=c_green;  CheckCompletos();  }  }
+
+    bool pesca_done;
+    public bool GetPescaDone(){  return pesca_done;  } 
+    public void SetPescaDone(bool x){  pesca_done=x;  if(x){  sr_pesca.color=c_green;  CheckCompletos();  }  }
 
     bool monumento_done;
     public bool GetMonumentoDone(){  return monumento_done;  } 
@@ -40,9 +48,9 @@ public class GameManager : MonoBehaviour
 
     void CheckCompletos()
     {
-        if(vasos_done /*&& bicicleta_done*/){  sr_pvMonumento.color=c_yellow;  }
-        if(bicicleta_done /*&& bicicleta_done*/){  sr_pvLancha.color=c_yellow;  }
-        if(patineta_done /*&& bicicleta_done*/){  sr_pvAscensor.color=c_yellow;  }
+        if(!lancha_done && metro_done && pesca_done){  sr_pvLancha.color=c_yellow;  }
+        if(!monumento_done && vasos_done /*&& _done*/){  sr_pvMonumento.color=c_yellow;  }
+        if(!ascensor_done && patineta_done /*&& bicicleta_done*/){  sr_pvAscensor.color=c_yellow;  }
     }
 
     [SerializeField]
@@ -50,7 +58,7 @@ public class GameManager : MonoBehaviour
     public string GetEstado(){  return estado;  } 
     public void SetEstado(string x){  estado=x;  }
     public Color c_red,c_yellow,c_green;
-    public SpriteRenderer sr_patineta,sr_vasos,sr_bicicleta,
+    public SpriteRenderer sr_patineta,sr_vasos,sr_bicicleta,sr_metro,sr_pesca,
                           sr_pvMonumento,sr_pvAscensor,sr_pvLancha;
     public async UniTask Esperar(float segundos)
     {

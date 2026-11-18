@@ -38,6 +38,6 @@ public class Monumento : MonoBehaviour
     {
         go_escape.SetActive(true);
         await GameManager.Instance.Esperar(3);
-        go_escape.GetComponent<TextMeshPro>().DOColor(Color.clear,.5f);
+        if(go_escape!=null){   go_escape.GetComponent<TextMeshPro>().DOColor(Color.clear,.5f);   }
     }
 }

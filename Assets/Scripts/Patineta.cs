@@ -36,10 +36,10 @@ public class Patineta : MonoBehaviour
     }
     void CheckInput()
     {
-        if(InputController.Instance.lUp.WasPressedThisFrame() || InputController.Instance.rUp.WasPressedThisFrame() )   {  CheckIfCorrect(0);  }else
-        if(InputController.Instance.lLeft.WasPressedThisFrame() || InputController.Instance.rLeft.WasPressedThisFrame() ) {  CheckIfCorrect(1);  }else
-        if(InputController.Instance.lDown.WasPressedThisFrame() || InputController.Instance.rDown.WasPressedThisFrame() ) {  CheckIfCorrect(2);  }else
-        if(InputController.Instance.lRight.WasPressedThisFrame() || InputController.Instance.rRight.WasPressedThisFrame() ){  CheckIfCorrect(3);  }
+        if(InputController.Instance.w.WasPressedThisFrame() || InputController.Instance.up.WasPressedThisFrame() )   {  CheckIfCorrect(0);  }else
+        if(InputController.Instance.a.WasPressedThisFrame() || InputController.Instance.left.WasPressedThisFrame() ) {  CheckIfCorrect(1);  }else
+        if(InputController.Instance.s.WasPressedThisFrame() || InputController.Instance.down.WasPressedThisFrame() ) {  CheckIfCorrect(2);  }else
+        if(InputController.Instance.d.WasPressedThisFrame() || InputController.Instance.right.WasPressedThisFrame() ){  CheckIfCorrect(3);  }
     }
     void CheckIfCorrect(int w)
     {

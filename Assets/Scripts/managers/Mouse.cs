@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Mousey : MonoBehaviour
 {
-    public GameObject pref_patineta,pref_vasos,pref_bicicleta,
+    public GameObject pref_patineta,pref_vasos,pref_bicicleta,pref_metro,pref_pesca,
                       pref_monumento,pref_ascensor,pref_lancha;
     public GameObject go_menu, go_mapa, go_pref, go_activo, go_pausa, go_pausamapa, go_pausavisual, go_intro;
     public Transform t_mouse;
@@ -74,15 +74,19 @@ public class Mousey : MonoBehaviour
             {    GameManager.Instance.SetEstado("pre");  go_pref=pref_patineta;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
             if(col.name=="act_vasos")
             {    GameManager.Instance.SetEstado("pre");  go_pref=pref_vasos;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  }else
-            if(col.name=="act_bicicleta")
-            {    GameManager.Instance.SetEstado("pre");  go_pref=pref_bicicleta;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
+            // if(col.name=="act_bicicleta")
+            // {    GameManager.Instance.SetEstado("pre");  go_pref=pref_bicicleta;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
+            if(col.name=="act_metro")
+            {    GameManager.Instance.SetEstado("pre");  go_pref=pref_metro;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
+            if(col.name=="act_pesca")
+            {    GameManager.Instance.SetEstado("pre");  go_pref=pref_pesca;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
 
-            if(col.name=="pv_ascensor" && GameManager.Instance.GetPatinetaDone() /*&& GameManager.Instance.GetBicicletaDone()*/)
-            {    GameManager.Instance.SetEstado("visual");  go_pref=pref_ascensor;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);   }
+            if(col.name=="pv_lancha" && GameManager.Instance.GetPescaDone() && GameManager.Instance.GetMetroDone())
+            {    GameManager.Instance.SetEstado("visual");  go_pref=pref_lancha;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);   }
             if(col.name=="pv_monumento" && GameManager.Instance.GetVasosDone() /*&& GameManager.Instance.GetBicicletaDone()*/)
             {    GameManager.Instance.SetEstado("visual");  go_pref=pref_monumento;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);   }
-            if(col.name=="pv_lancha" && GameManager.Instance.GetBicicletaDone() /*&& GameManager.Instance.GetBicicletaDone()*/)
-            {    GameManager.Instance.SetEstado("visual");  go_pref=pref_lancha;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);   }
+            if(col.name=="pv_ascensor" && GameManager.Instance.GetPatinetaDone() /*&& GameManager.Instance.GetBicicletaDone()*/)
+            {    GameManager.Instance.SetEstado("visual");  go_pref=pref_ascensor;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);   }
         }else
         if(col && GameManager.Instance.GetEstado()=="actividad")
         {

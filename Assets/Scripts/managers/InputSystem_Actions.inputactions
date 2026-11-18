@@ -43,7 +43,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "LUp",
+                    "name": "w",
                     "type": "Button",
                     "id": "96240422-0ada-4945-86d3-d2b989f4e074",
                     "expectedControlType": "",
@@ -52,7 +52,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LLeft",
+                    "name": "a",
                     "type": "Button",
                     "id": "74688b4a-44fe-4d52-80b6-fb1ddbe07a2b",
                     "expectedControlType": "",
@@ -61,7 +61,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LDown",
+                    "name": "s",
                     "type": "Button",
                     "id": "94c7cbd9-8e7d-44eb-8f71-8c176fdf729e",
                     "expectedControlType": "",
@@ -70,45 +70,9 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "LRight",
+                    "name": "d",
                     "type": "Button",
                     "id": "d6e61272-8fbd-4447-bb71-8c0f92ab0603",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RUp",
-                    "type": "Button",
-                    "id": "3c4d5183-2eee-453f-879c-4fe6429cc579",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RLeft",
-                    "type": "Button",
-                    "id": "55a09362-948d-46f5-aedd-30128b45876b",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RDown",
-                    "type": "Button",
-                    "id": "7cbedfae-1c14-4411-9e09-cc43871ce6bd",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "RRight",
-                    "type": "Button",
-                    "id": "94d73eef-ca00-4856-9a54-5c85a138d957",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -217,6 +181,15 @@
                     "name": "Tab",
                     "type": "Button",
                     "id": "c4b469a0-958b-4248-94a1-1570ee4020c0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "RKey",
+                    "type": "Button",
+                    "id": "2ed58635-0889-4a12-93cd-488dc6512af9",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -429,7 +402,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "LUp",
+                    "action": "w",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb95e6ec-3c3c-4a69-91cb-a574d4983289",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "w",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -451,7 +435,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse",
-                    "action": "LLeft",
+                    "action": "a",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "790707c1-cd1a-44a8-a150-8ed5c9fbf3d2",
+                    "path": "<Keyboard>/leftArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "a",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -473,7 +468,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LDown",
+                    "action": "s",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "51ba6045-1ed0-4859-aecf-3929cab3d5c3",
+                    "path": "<Keyboard>/downArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "s",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -495,7 +501,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "LRight",
+                    "action": "d",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "150a7eaf-6dc3-45aa-8c94-7dec47060eda",
+                    "path": "<Keyboard>/rightArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "d",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -512,34 +529,12 @@
                 },
                 {
                     "name": "",
-                    "id": "b641d081-38e9-42ee-90aa-0fb7576a7da8",
-                    "path": "<Keyboard>/upArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RUp",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "99a8c870-293a-44ef-93b3-dd11b0e979fb",
                     "path": "<Keyboard>/upArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "RUpHoldable",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c16cf117-fe63-405f-aae8-89766c4d2ff8",
-                    "path": "<Keyboard>/leftArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RLeft",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -556,34 +551,12 @@
                 },
                 {
                     "name": "",
-                    "id": "ffac1666-fbc0-4dba-a22c-26f31858c9ac",
-                    "path": "<Keyboard>/downArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RDown",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "c6a9dabf-ea33-4b05-9971-7b79138f302a",
                     "path": "<Keyboard>/downArrow",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "RDownHoldable",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "dfde4adb-3e54-4e61-8a47-c6444a563de0",
-                    "path": "<Keyboard>/rightArrow",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "RRight",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -639,6 +612,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "Tab",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a9782c12-7021-40b5-b7df-92ab0d5af9dd",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "RKey",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
