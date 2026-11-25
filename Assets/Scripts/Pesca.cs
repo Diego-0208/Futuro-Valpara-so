@@ -5,15 +5,12 @@ using UnityEngine;
 public class Pesca : MonoBehaviour
 {
     public Transform t_movible,t_pez,t_barrapez;
-    float _pos;
     float timer,timerMax=20,captura;
-    bool derecha,empezado,dentro,capturado;
-
+    bool derecha,dentro;
     public Transform t_barraEnergia;
     bool terminado;
-    public TextMeshPro txt_final;
     bool doneBefore;
-    public GameObject go_final;
+    public GameObject go_final,go_perdiste;
     void Start()
     {
         if(GameManager.Instance.GetPescaDone()){   doneBefore=true;   }
@@ -26,21 +23,13 @@ public class Pesca : MonoBehaviour
         Jugador();
         CheckAdentro();
         Llenar();
-        if((timer<=0 || captura>=1) && !terminado)
-        {
-            terminado=true;
-            go_final.SetActive(true);
-            GameManager.Instance.SetEstado("pausa");
-            if(captura<1)
-            {   if(!doneBefore){   Lost();   }else{   JustEnd();   }   }else
-            {   Won();   }
-            DOTween.KillAll();
-        }
     }
     void Tiempo()
     {
         if(timer>0 && !terminado && !GameManager.Instance.GetEnPausa() && captura<1)
-        {   timer-=Time.deltaTime;  t_barraEnergia.localScale=new Vector2(timer/timerMax,1);   }
+        {   timer-=Time.deltaTime;  t_barraEnergia.localScale=new Vector2(timer/timerMax,1);   }else
+        if(timer<=0 && !terminado)
+        {   terminado=true;   Lost();   }
     }
     void Jugador()
     {
@@ -80,11 +69,22 @@ public class Pesca : MonoBehaviour
         if(!dentro && captura>0)
         {   captura-=Time.deltaTime*.07f;   }
         t_barrapez.localScale=new Vector3(captura,1);
+        if(captura>=1)
+        {   Won();   }
+    }
+    void Won()
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_final.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+        if(!doneBefore){   GameManager.Instance.SetPescaDone(true);   }
     }
     void Lost()
-    {  txt_final.text="quizás la próxima"; }
-    void Won()
-    {  txt_final.text="lo lograste !!";  if(!doneBefore){   GameManager.Instance.SetPescaDone(true);   }   }
-    void JustEnd()
-    {  txt_final.text="quizás la próxima";  }
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_perdiste.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+    }
 }

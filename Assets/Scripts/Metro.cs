@@ -7,12 +7,12 @@ public class Metro : MonoBehaviour
     Transform[] t_direcciones=new Transform[4];
     SpriteRenderer[] sr_direcciones=new SpriteRenderer[4];
     int _posActual=-1;
-    public Color c_off, c_on;
+    public Color c_off,c_on;
     int _score;
-    public TextMeshPro txt_score,txt_final;
-    bool ended,done,doneBefore;
+    public TextMeshPro txt_score;
+    bool terminado,doneBefore;
     float timer=20;
-    public GameObject go_final;
+    public GameObject go_final,go_perdiste;
     void Start()
     {
         if(GameManager.Instance.GetMetroDone()){   doneBefore=true;   }
@@ -22,27 +22,26 @@ public class Metro : MonoBehaviour
         CambiarPosicion();
     }
     void Update()
+    {   Tiempo();   Inputs();   }
+    void Tiempo()
     {
-        if(InputController.Instance.w.WasPressedThisFrame() && _posActual==0 && !ended)
+        if(timer>0 && !terminado && !GameManager.Instance.GetEnPausa() && _score<30)
+        {   timer-=Time.deltaTime;  t_barraEnergia.localScale=new Vector2(timer/20,1);   }else
+        if(timer<=0 && !terminado)
+        {   Lost();   }else
+        if(_score==30 && !terminado)
+        {   Won();   }
+    }
+    void Inputs()
+    {
+        if(InputController.Instance.w.WasPressedThisFrame() && _posActual==0 && !terminado)
         {   SumarPuntaje();   }
-        if(InputController.Instance.a.WasPressedThisFrame() && _posActual==1 && !ended)
+        if(InputController.Instance.a.WasPressedThisFrame() && _posActual==1 && !terminado)
         {   SumarPuntaje();   }
-        if(InputController.Instance.s.WasPressedThisFrame() && _posActual==2 && !ended)
+        if(InputController.Instance.s.WasPressedThisFrame() && _posActual==2 && !terminado)
         {   SumarPuntaje();   }
-        if(InputController.Instance.d.WasPressedThisFrame() && _posActual==3 && !ended)
+        if(InputController.Instance.d.WasPressedThisFrame() && _posActual==3 && !terminado)
         {   SumarPuntaje();   }
-
-        if(timer>0 && !ended && !GameManager.Instance.GetEnPausa() && _score<30)
-        {   timer-=Time.deltaTime;  t_barraEnergia.localScale=new Vector2(timer/20,1);   }
-        else
-        if((timer<=0 || _score==30) && !ended)
-        {
-            ended=true;
-            go_final.SetActive(true);
-            GameManager.Instance.SetEstado("pausa");
-            if(_score<30)
-            {   if(!doneBefore){   Lost();   }else{   JustEnd();   }   }
-        }
     }
     async void CambiarPosicion()
     {
@@ -53,7 +52,7 @@ public class Metro : MonoBehaviour
         for(int i=0; i<4; i++){   sr_direcciones[i].color=c_off;   }
         sr_direcciones[nuevo].color=c_on;
         await GameManager.Instance.Esperar(Random.Range(2,2));
-        if(!ended){   CambiarPosicion();   }
+        if(!terminado){   CambiarPosicion();   }
     }
     void SumarPuntaje()
     {
@@ -61,10 +60,19 @@ public class Metro : MonoBehaviour
         if(_score<30)
         {   txt_score.text=_score+"/30";   }else{   txt_score.text="30/30";   Won();   }
     }
-    void Lost()
-    {  txt_final.text="quizás la próxima"; }
     void Won()
-    {  txt_final.text="lo lograste !!";  if(!doneBefore){   GameManager.Instance.SetMetroDone(true);   }   }
-    void JustEnd()
-    {  txt_final.text="quizás la próxima";  }
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_final.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+        if(!doneBefore){   GameManager.Instance.SetMetroDone(true);   }
+    }
+    void Lost()
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_perdiste.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+    }
 }

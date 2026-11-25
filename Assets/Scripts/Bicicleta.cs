@@ -4,52 +4,71 @@ using UnityEngine;
 public class Bicicleta : MonoBehaviour
 {
     public Transform t_val;
-    float[] _posicionesx=new float[]{-3.7f,0,3.7f};
-    int pos_actual=1;
-    bool ended,listo;
-    public Transform t_movible;
+    float[] _posicionesx=new float[]{-2.3f,2.3f};
+    int pos_actual=0;
+    bool terminado;
     public Transform[] t_spawn; 
-    float timer,espera=1; //20s
+    float timer,timerMax=15;
     public GameObject go_caja;
-    public TextMeshPro txt_distancia;
-    float aceleracion=-1.5f,velocidad_final,alos15;
     public SpriteRenderer sr_green,sr_red;
+    float duracionDesplazo=4f,espera=2.75f;
+    public Transform t_barraEnergia;
+    public GameObject go_final,go_perdiste;
+    bool doneBefore;
     void Start()
     {
-        velocidad_final=aceleracion*15f;
-        alos15=.5f*aceleracion*Mathf.Pow(15f, 2f)-5;
+        timer=timerMax;   doneBefore=GameManager.Instance.GetBicicletaDone();
         Spawn();
+        CambiarVelocidad();
     }
     void Update()
     {
-        if(!ended && !GameManager.Instance.GetEnPausa())
+        if(!terminado && !GameManager.Instance.GetEnPausa())
         {
-            if(InputController.Instance.a.WasPressedThisFrame() && pos_actual>0)
-            {  pos_actual--;  t_val.DOLocalMoveX(_posicionesx[pos_actual],.3f);  }
-            if(InputController.Instance.d.WasPressedThisFrame() && pos_actual<2)
-            {  pos_actual++;  t_val.DOLocalMoveX(_posicionesx[pos_actual],.3f);  }
-
-            timer+=Time.deltaTime;  Debug.Log((int)timer);
-            
-            float eje_y;
-            if (timer<15)
-            {  eje_y=.5f*aceleracion*Mathf.Pow(timer, 2f)-5;  txt_distancia.text=-(int)(t_movible.position.y*.5f)+"m\n/ 150m";  }else
-            {  float extraTime=timer-15f;  eje_y=alos15+(velocidad_final*extraTime);  txt_distancia.text=-(int)(t_movible.position.y*.5f)+"m";  }
-            
-            if(timer>=15 && !listo){  listo=true;  sr_green.DOFade(.4f,.4f).OnComplete(()=>{sr_green.DOFade(0,.1f);});  }
-
-            t_movible.position=new Vector3(0,eje_y,0);
-            
-
-
-
+            Tiempo();
+            CheckInputs();      
         }
+    }
+    void Tiempo()
+    {
+        if(timer>0){   timer-=Time.deltaTime;   t_barraEnergia.localScale=new Vector2(timer/timerMax,1);   }
+        else{   terminado=true;   Won();   sr_green.DOFade(.4f,.4f).OnComplete(()=>{   sr_green.DOFade(0,.1f);   });   }
+    }
+    void CheckInputs()
+    {
+        if(InputController.Instance.a.WasPressedThisFrame() && pos_actual==1)
+        {  pos_actual--;  t_val.DOLocalMoveX(_posicionesx[pos_actual],.3f);  }
+        if(InputController.Instance.d.WasPressedThisFrame() && pos_actual==0)
+        {  pos_actual++;  t_val.DOLocalMoveX(_posicionesx[pos_actual],.3f);  }
+    }
+    void CambiarVelocidad()
+    {
+        DOTween.To(()=>duracionDesplazo,x=>duracionDesplazo=x,2f,13f).SetEase(Ease.OutQuad);
+        DOTween.To(()=>espera,x=>espera=x,1f,13f).SetEase(Ease.OutQuad);
     }
     async void Spawn()
     {
+        if(terminado){   return;   }
+        int dir=Random.Range(0,2);
+        GameObject n=Instantiate(go_caja,t_spawn[dir]);
+        n.transform.DOLocalMove(new Vector2(3*(dir==0?-1:1),-10.93f),duracionDesplazo).OnComplete(()=>{   Destroy(n);   });
+        n.transform.DOScale(new Vector2(1.5f,1.5f),duracionDesplazo);
         await GameManager.Instance.Esperar(espera);
-        GameObject n=Instantiate(go_caja,t_spawn[Random.Range(0,3)]);
-        n.transform.parent=t_movible;
         Spawn();
-    } 
+    }
+    void Won()
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_final.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+        if(!doneBefore){   GameManager.Instance.SetBicicletaDone(true);   }
+    }
+    void Lost()
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_perdiste.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+    }
 }

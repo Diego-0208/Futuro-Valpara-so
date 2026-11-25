@@ -13,9 +13,9 @@ public class GameManager : MonoBehaviour
     public bool GetVasosDone(){  return vasos_done;  } 
     public void SetVasosDone(bool x){  vasos_done=x;  if(x){  sr_vasos.color=c_green;  CheckCompletos();  }  }
 
-    bool bicicleta_done=true; //x ahora, cambiar cuando si lo programe bien
+    bool bicicleta_done;
     public bool GetBicicletaDone(){  return bicicleta_done;  } 
-    public void SetBicicletaDone(bool x){  bicicleta_done=x;  if(x){  sr_bicicleta.color=c_green;  Debug.Log("me");  CheckCompletos();  }  }
+    public void SetBicicletaDone(bool x){  bicicleta_done=x;  if(x){  sr_bicicleta.color=c_green;  CheckCompletos();  }  }
     
     bool metro_done;
     public bool GetMetroDone(){  return metro_done;  } 
@@ -24,6 +24,14 @@ public class GameManager : MonoBehaviour
     bool pesca_done;
     public bool GetPescaDone(){  return pesca_done;  } 
     public void SetPescaDone(bool x){  pesca_done=x;  if(x){  sr_pesca.color=c_green;  CheckCompletos();  }  }
+
+    bool trole_done;
+    public bool GetTroleDone(){  return trole_done;  } 
+    public void SetTroleDone(bool x){  trole_done=x;  if(x){  sr_trole.color=c_green;  CheckCompletos();  }  }
+
+    bool feria_done;
+    public bool GetFeriaDone(){  return feria_done;  } 
+    public void SetFeriaDone(bool x){  feria_done=x;  if(x){  sr_feria.color=c_green;  CheckCompletos();  }  }
 
     bool monumento_done;
     public bool GetMonumentoDone(){  return monumento_done;  } 
@@ -42,23 +50,28 @@ public class GameManager : MonoBehaviour
     public void SetEnPausa(bool x){  en_pausa=x;  }
 
     bool primeravez=true;
-    public bool GetPrimera(){  return primeravez;  }
-    public void SetPrimera(bool x){  primeravez=x;  }
+    public bool GetPrimeraVez(){  return primeravez;  }
+    public void SetPrimeraVez(bool x){  primeravez=x;  }
 
+    int volumen=5;
+    public int GetVolumen(){   return volumen;   }
+    public void SetVolumen(int x){   volumen+=x;   }
+    int sfx=5;
+    public int GetSfx(){   return sfx;   }
+    public void SetSfx(int x){   sfx+=x;   }
 
     void CheckCompletos()
     {
         if(!lancha_done && metro_done && pesca_done){  sr_pvLancha.color=c_yellow;  }
-        if(!monumento_done && vasos_done /*&& _done*/){  sr_pvMonumento.color=c_yellow;  }
-        if(!ascensor_done && patineta_done /*&& bicicleta_done*/){  sr_pvAscensor.color=c_yellow;  }
+        if(!monumento_done && vasos_done && trole_done && feria_done){  sr_pvMonumento.color=c_yellow;  }
+        if(!ascensor_done && patineta_done && bicicleta_done && feria_done){  sr_pvAscensor.color=c_yellow;  }
     }
-
     [SerializeField]
     private string estado="menu";
     public string GetEstado(){  return estado;  } 
     public void SetEstado(string x){  estado=x;  }
     public Color c_red,c_yellow,c_green;
-    public SpriteRenderer sr_patineta,sr_vasos,sr_bicicleta,sr_metro,sr_pesca,
+    public SpriteRenderer sr_patineta,sr_vasos,sr_bicicleta,sr_metro,sr_pesca,sr_trole,sr_feria,
                           sr_pvMonumento,sr_pvAscensor,sr_pvLancha;
     public async UniTask Esperar(float segundos)
     {

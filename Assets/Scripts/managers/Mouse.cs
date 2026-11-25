@@ -5,9 +5,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 public class Mousey : MonoBehaviour
 {
-    public GameObject pref_patineta,pref_vasos,pref_bicicleta,pref_metro,pref_pesca,
+    public GameObject pref_patineta,pref_vasos,pref_bicicleta,pref_metro,pref_pesca,pref_trole,pref_feria,
                       pref_monumento,pref_ascensor,pref_lancha;
-    public GameObject go_menu, go_mapa, go_pref, go_activo, go_pausa, go_pausamapa, go_pausavisual, go_intro;
+    public GameObject go_menu, go_mapa, go_pref, go_activo, go_pausa, go_pausamapa, go_pausavisual, go_intro,go_opciones;
     public Transform t_mouse;
     public SpriteRenderer sr_mouse;
     void Start()
@@ -35,7 +35,7 @@ public class Mousey : MonoBehaviour
 
         if(InputController.Instance.space.WasPressedThisFrame() && GameManager.Instance.GetEstado()=="intro")
         {
-            GameManager.Instance.SetEstado("mapa");  GameManager.Instance.SetPrimera(false);  go_intro.SetActive(false);  go_mapa.SetActive(true);
+            GameManager.Instance.SetEstado("mapa");  GameManager.Instance.SetPrimeraVez(false);  go_intro.SetActive(false);  go_mapa.SetActive(true);
         }
 
         if(InputController.Instance.lClick.WasPressedThisFrame())
@@ -60,26 +60,30 @@ public class Mousey : MonoBehaviour
         if(col && GameManager.Instance.GetEstado()=="menu")
         {
             if(col.name=="0")
-            {   Intro();   }//mapa
+            {   Intro();   }
             else
-            // if(col.name=="1")
-            // {  GameManager.Instance.SetEstado("ajustes");  }//ajustes
-            // else
+            if(col.name=="1")
+            {  GameManager.Instance.SetEstado("opciones");   go_opciones.SetActive(true);   }
+            else
             if(col.name=="2")
-            {  Application.Quit();  }//salir
-        }
+            {  Application.Quit();  }
+        }else
         if(col && GameManager.Instance.GetEstado()=="mapa")
         {
             if(col.name=="act_patineta")
             {    GameManager.Instance.SetEstado("pre");  go_pref=pref_patineta;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
             if(col.name=="act_vasos")
             {    GameManager.Instance.SetEstado("pre");  go_pref=pref_vasos;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  }else
-            // if(col.name=="act_bicicleta")
-            // {    GameManager.Instance.SetEstado("pre");  go_pref=pref_bicicleta;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
+            if(col.name=="act_bicicleta")
+            {    GameManager.Instance.SetEstado("pre");  go_pref=pref_bicicleta;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
             if(col.name=="act_metro")
             {    GameManager.Instance.SetEstado("pre");  go_pref=pref_metro;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
             if(col.name=="act_pesca")
             {    GameManager.Instance.SetEstado("pre");  go_pref=pref_pesca;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
+            if(col.name=="act_trole")
+            {    GameManager.Instance.SetEstado("pre");  go_pref=pref_trole;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
+            if(col.name=="act_feria")
+            {    GameManager.Instance.SetEstado("pre");  go_pref=pref_feria;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);  /*sr_mouse.enabled=false;*/  }else
 
             if(col.name=="pv_lancha" && GameManager.Instance.GetPescaDone() && GameManager.Instance.GetMetroDone())
             {    GameManager.Instance.SetEstado("visual");  go_pref=pref_lancha;  go_activo=Instantiate(go_pref);  go_mapa.SetActive(false);   }
@@ -126,11 +130,24 @@ public class Mousey : MonoBehaviour
             else
             if(col.name=="1")
             {    GameManager.Instance.SetEstado("menu");  go_pausamapa.SetActive(false);  GameManager.Instance.SetEnPausa(false);  go_menu.SetActive(true);  go_mapa.SetActive(false);  }//menu
+        }else
+        if(col && GameManager.Instance.GetEstado()=="opciones")
+        {
+            if(col.name=="0")
+            {    if(GameManager.Instance.GetVolumen()>0){   GameManager.Instance.SetVolumen(-1);   }   ActualizarVol();   }else
+            if(col.name=="1")
+            {    if(GameManager.Instance.GetVolumen()<10){   GameManager.Instance.SetVolumen(1);   }   ActualizarVol();   }else
+            if(col.name=="2")
+            {    if(GameManager.Instance.GetSfx()>0){   GameManager.Instance.SetSfx(-1);   }   ActualizarVol();   }else
+            if(col.name=="3")
+            {    if(GameManager.Instance.GetSfx()<10){   GameManager.Instance.SetSfx(1);   }   ActualizarVol();   }
+            if(col.name=="4")
+            {    GameManager.Instance.SetEstado("menu");   go_opciones.SetActive(false);   }
         }
     }
     async void Intro()
     {
-        if(GameManager.Instance.GetPrimera())
+        if(GameManager.Instance.GetPrimeraVez())
         {
             GameManager.Instance.SetEstado("intro");  go_menu.SetActive(false);  go_intro.SetActive(true);
             await GameManager.Instance.Esperar(2);
@@ -140,5 +157,18 @@ public class Mousey : MonoBehaviour
         {
             GameManager.Instance.SetEstado("mapa");  go_menu.SetActive(false);  go_mapa.SetActive(true);
         }
+    }
+    public SpriteRenderer[] sr_vol,sr_sfx;
+    public AudioSource aus_musica,aus_sfx;
+    void ActualizarVol()
+    {
+        for(int i=0; i<10; i++)
+        {
+            if(GameManager.Instance.GetVolumen()>i){   sr_vol[i].DOFade(1,0);   }else{   sr_vol[i].DOFade(0,0);   }
+            if(GameManager.Instance.GetSfx()>i){   sr_sfx[i].DOFade(1,0);   }else{   sr_sfx[i].DOFade(0,0);   }
+        }
+        Debug.Log(GameManager.Instance.GetVolumen());
+        aus_musica.volume=GameManager.Instance.GetVolumen()/10f;
+        aus_sfx.volume=GameManager.Instance.GetSfx()/10f;
     }
 }

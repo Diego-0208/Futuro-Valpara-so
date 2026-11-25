@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 public class Pregame : MonoBehaviour
 {
-    float timer=4;
+    float timer=2;
     bool ended;
     public MonoBehaviour _script;
     public TextMeshPro txt_contador;

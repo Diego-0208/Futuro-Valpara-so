@@ -10,15 +10,13 @@ public class Vasos : MonoBehaviour
     float[] v_posicionesx=new float[]{-1.6f,0,1.6f};
     float yPos=-1.90f;
     int[] actualPos=new int[]{0,1,2};
-    bool listos;
+    bool listos,vaso_elegido,vaso_correcto,resuelto;
+    public Sprite spr_arriba;
     public SpriteRenderer sr_green,sr_red;
     float timer=5;
-    bool ended;
     public Transform t_barraEnergia;
-    public GameObject go_final;
-    bool doneBefore;
-    public TextMeshPro txt_final;
-    bool vaso_elegido,vaso_correcto,resolviendo;
+    public GameObject go_final,go_perdiste;
+    bool terminado,doneBefore;
     void Start()
     {
         if(GameManager.Instance.GetVasosDone()){   doneBefore=true;   }
@@ -26,18 +24,16 @@ public class Vasos : MonoBehaviour
     }
     void Update()
     {
-        if(timer>0 && !ended && listos && !vaso_elegido  && !GameManager.Instance.GetEnPausa())
-        {  timer-=Time.deltaTime;  t_barraEnergia.localScale=new Vector2(timer/5,1);  }
-        else
-        if((timer<0 && !ended) || resolviendo)
-        {  ended=true;
-           go_final.SetActive(true);
-           GameManager.Instance.SetEstado("pausa");
-           if(!doneBefore)
-           {  if(!vaso_correcto){  Lost();  }else{  Won();  }  }
-           else
-           {  JustEnd();  }
-        }
+        Tiempo();
+    }
+    void Tiempo()
+    {
+        if(timer>0 && !terminado && listos && !vaso_elegido && !GameManager.Instance.GetEnPausa())
+        {  timer-=Time.deltaTime;  t_barraEnergia.localScale=new Vector2(timer/5,1);  }else
+        if((resuelto && !vaso_correcto) || (timer<0 && !terminado))
+        {   Lost();   }else
+        if(resuelto && vaso_correcto && !terminado)
+        {   Won();   }
     }
     async void Inicio()
     {
@@ -52,32 +48,27 @@ public class Vasos : MonoBehaviour
     async void Cambio()
     {
         if(_cantidadCambios<1){  listos=true;  Habilitados();  return;  }
-        // Debug.Log(actualPos[0]+""+actualPos[1]+""+actualPos[2]);
         _cantidadCambios-=1;
         int v1=Random.Range(0,3);
         int v2=v1;  int temp=actualPos[v1];
         while(v2==v1){  v2=Random.Range(0,3);  }
 
-        t_vasos[v1].DOMoveX(v_posicionesx[actualPos[v2]],_tiempoDeCambio);
-        t_vasos[v2].DOMoveX(v_posicionesx[actualPos[v1]],_tiempoDeCambio);
+        t_vasos[v1].DOLocalMoveX(v_posicionesx[actualPos[v2]],_tiempoDeCambio);
+        t_vasos[v2].DOLocalMoveX(v_posicionesx[actualPos[v1]],_tiempoDeCambio);
         actualPos[v1]=actualPos[v2];  actualPos[v2]=temp;
         await GameManager.Instance.Esperar(_tiempoDeCambio*1.1f);
 
-        // Debug.Log(actualPos[0]+""+actualPos[1]+""+actualPos[2]);
         _tiempoDeCambio*=0.85f;  Cambio();
     }
     void Habilitados()
-    {
-        t_vasos[0].GetComponent<BoxCollider2D>().enabled=true;
-        t_vasos[1].GetComponent<BoxCollider2D>().enabled=true;
-        t_vasos[2].GetComponent<BoxCollider2D>().enabled=true;
-    }
+    {   t_vasos[0].GetComponent<BoxCollider2D>().enabled=true;   t_vasos[1].GetComponent<BoxCollider2D>().enabled=true;   t_vasos[2].GetComponent<BoxCollider2D>().enabled=true;   }
     public void Resolver(string nombre)
     {  int elegido=int.Parse(nombre);  ResolverReal(elegido);  }
     async void ResolverReal(int elegido)
     {
         t_moneda.parent=t_moneda.parent.parent;
         vaso_elegido=true;
+        for(int i=0;i<3;i++){   t_vasos[i].GetComponent<SpriteRenderer>().sprite=spr_arriba;   t_vasos[i].GetComponent<SpriteRenderer>().sortingOrder=3;   }
         t_vasos[elegido].DOLocalMoveY(0,.3f);
         if(elegido==1)
         {  sr_green.DOFade(.4f,.4f).OnComplete(()=>{sr_green.DOFade(0,.1f);});  vaso_correcto=true;  }
@@ -88,12 +79,21 @@ public class Vasos : MonoBehaviour
         t_vasos[0].DOLocalMoveY(0,.3f);  t_vasos[1].DOLocalMoveY(0,.3f);  t_vasos[2].DOLocalMoveY(0,.3f);
         await GameManager.Instance.Esperar(.7f);
 
-        resolviendo=true;
+        resuelto=true;
+    }
+    void Won()
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_final.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+        if(!doneBefore){   GameManager.Instance.SetVasosDone(true);   }
     }
     void Lost()
-    {  txt_final.text="quizás la próxima"; }
-    void Won()
-    {  txt_final.text="lo lograste !!";  GameManager.Instance.SetVasosDone(true);  }
-    void JustEnd()
-    {  txt_final.text="quizás la próxima";  }
+    {
+        DOTween.KillAll();
+        terminado=true;
+        go_perdiste.SetActive(true);
+        GameManager.Instance.SetEstado("pausa");
+    }
 }
